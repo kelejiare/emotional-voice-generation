@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.hydra/
+outputs/
+ckpts/
+data/
+third_party/
+*.log
+*.wav
+*.pt
+*.pth
+*.safetensors

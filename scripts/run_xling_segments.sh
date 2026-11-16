@@ -8,14 +8,14 @@ cd "$ROOT_DIR"
 TEXT=""
 TEXT_FILE=""
 EMOTION="neutral"
-TAG="v3"
+TAG="segments"
 
 usage () {
   cat <<EOU
 Usage:
-  bash scripts/run_xling_zh_stable_clone_v3.sh --text "<zh_text>" --emotion <angry|happy|sad|neutral> --tag <run_tag>
+  bash scripts/run_xling_segments.sh --text "<zh_text>" --emotion <angry|happy|sad|neutral> --tag <run_tag>
   OR
-  bash scripts/run_xling_zh_stable_clone_v3.sh --text_file /path/to/text.txt --emotion ... --tag ...
+  bash scripts/run_xling_segments.sh --text_file /path/to/text.txt --emotion ... --tag ...
 
 Env:
   STAGE1_PROMPT_WAV=/data/lizhen/EmoVoice/data/speakers/lizhen_ch_neutral.wav
@@ -82,13 +82,13 @@ echo "[INFO] STAGE1_PROMPT_WAV=$STAGE1_PROMPT_WAV"
 echo "[INFO] MAX_CHARS=$MAX_CHARS MIN_CHARS=$MIN_CHARS GAP_MS=$GAP_MS FADE_MS=$FADE_MS SKIP_VC=$SKIP_VC NO_SPLIT=$NO_SPLIT KEEP_EXACT=$KEEP_EXACT"
 echo "[INFO] TEXT=$(cat "$TEXT_TXT")"
 
-FIXED_JSONL="$RUN_ROOT/inputs/fixed_v3.jsonl"
+FIXED_JSONL="$RUN_ROOT/inputs/fixed_segments.jsonl"
 
 extra=()
 if [[ "$NO_SPLIT" == "1" ]]; then extra+=(--no_split); fi
 if [[ "$KEEP_EXACT" == "1" ]]; then extra+=(--keep_exact); fi
 
-python tools/build_xling_fixed_jsonl_v3.py \
+python tools/build_xling_segments.py \
   --text_file "$TEXT_TXT" \
   --emotion "$EMOTION" \
   --ref_wav "$REF_WAV" \
@@ -120,7 +120,7 @@ print("[CHECK] orig  =", orig)
 print("[CHECK] joined=", joined)
 
 if norm(orig) != norm(joined):
-    raise SystemExit("[ERR] fixed_v3.jsonl does not match text.txt (input corrupted)")
+    raise SystemExit("[ERR] fixed_segments.jsonl does not match text.txt (input corrupted)")
 print("[CHECK] OK: fixed jsonl matches input text.")
 PY
 
@@ -138,7 +138,7 @@ python -u tools/cosyvoice3_batch.py \
 
 if [[ "$SKIP_VC" == "1" ]]; then
   FINAL_WAV="$RUN_ROOT/final_stage1_only.wav"
-  python tools/concat_wavs_v3.py --in_dir "$STAGE1_OUT" --out_wav "$FINAL_WAV" --pattern "xling_*.wav" --gap_ms "$GAP_MS" --fade_ms "$FADE_MS"
+  python tools/concat_wavs_crossfade.py --in_dir "$STAGE1_OUT" --out_wav "$FINAL_WAV" --pattern "xling_*.wav" --gap_ms "$GAP_MS" --fade_ms "$FADE_MS"
   echo "[DONE] RUN_ROOT=$RUN_ROOT"
   echo "[DONE] FINAL_WAV=$FINAL_WAV"
   exit 0
@@ -156,7 +156,7 @@ python -u tools/cosyvoice3_batch.py \
   --out_dir "$VC_OUT" \
   --concat 2>&1 | tee "$RUN_ROOT/stage2_vc/vc.log"
 
-FINAL_WAV="$RUN_ROOT/final_zh_v3.wav"
-python tools/concat_wavs_v3.py --in_dir "$VC_OUT" --out_wav "$FINAL_WAV" --pattern "xling_*.wav" --gap_ms "$GAP_MS" --fade_ms "$FADE_MS"
+FINAL_WAV="$RUN_ROOT/final_zh.wav"
+python tools/concat_wavs_crossfade.py --in_dir "$VC_OUT" --out_wav "$FINAL_WAV" --pattern "xling_*.wav" --gap_ms "$GAP_MS" --fade_ms "$FADE_MS"
 echo "[DONE] RUN_ROOT=$RUN_ROOT"
 echo "[DONE] FINAL_WAV=$FINAL_WAV"

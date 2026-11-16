@@ -140,7 +140,7 @@ def main(args):
         whisper_model
     )
 
-    out_path = os.path.join(run_dir, "compare_full_metrics_v2.json")
+    out_path = os.path.join(run_dir, "compare_full_metrics.json")
     with open(out_path, "w") as f:
         json.dump(report, f, indent=4)
 

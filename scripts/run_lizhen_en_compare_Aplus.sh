@@ -247,10 +247,10 @@ run_one() {
     echo "[INFO] whisper decode (device=${WHISPER_DEVICE})"
     if [[ "${WHISPER_DEVICE}" == "cpu" ]]; then
       # 隐藏 GPU，避免 whisper 抢显存导致 OOM
-      CUDA_VISIBLE_DEVICES="" python examples/tts/utils/decode_whisper_v3.py \
+      CUDA_VISIBLE_DEVICES="" python examples/tts/utils/decode_whisper.py \
         --parent_dir "${out}" --audio_subdir pred_audio/neutral_prompt_speech || true
     else
-      python examples/tts/utils/decode_whisper_v3.py \
+      python examples/tts/utils/decode_whisper.py \
         --parent_dir "${out}" --audio_subdir pred_audio/neutral_prompt_speech || true
     fi
 

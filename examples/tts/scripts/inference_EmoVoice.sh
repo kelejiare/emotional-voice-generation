@@ -94,7 +94,7 @@ python $code_dir/inference_tts.py \
         ++speech_sample_rate=$speech_sample_rate \
         ++log_config.log_file=$decode_log/infer.log \
 
-python examples/tts/utils/decode_whisper_v3.py --parent_dir $decode_log --audio_subdir pred_audio/neutral_prompt_speech
+python examples/tts/utils/decode_whisper.py --parent_dir $decode_log --audio_subdir pred_audio/neutral_prompt_speech
 
 bash scripts/compute_wer.sh $decode_log
 

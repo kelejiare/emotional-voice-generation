@@ -72,7 +72,7 @@ fi
 
 # ===== 拼接成 1 分钟左右 wav =====
 FINAL_WAV="$RUN_ROOT/final_zh_emotion_story.wav"
-python tools/concat_wavs_v3.py \
+python tools/concat_wavs_crossfade.py \
   --in_dir "$FINAL_DIR" \
   --out_wav "$FINAL_WAV" \
   --pattern "story_*.wav" \

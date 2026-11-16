@@ -5,7 +5,7 @@ TEXT=""
 TAG="ljh"
 
 usage () {
-  echo 'Usage: bash scripts/run_xling_zh_stable_clone_v3_4emo.sh --text "<zh_text>" --tag <tag_prefix>'
+  echo 'Usage: bash scripts/run_xling_emotions.sh --text "<zh_text>" --tag <tag_prefix>'
 }
 
 while [[ $# -gt 0 ]]; do
@@ -28,7 +28,7 @@ for emo in happy angry sad neutral; do
   echo "[INFO] ===== ${emo} ====="
   LOG="${BATCH_DIR}/${emo}.log"
 
-  bash scripts/run_xling_zh_stable_clone_v3.sh \
+  bash scripts/run_xling_segments.sh \
     --text "${TEXT}" \
     --emotion "${emo}" \
     --tag "${TAG}" | tee "${LOG}"

@@ -19,7 +19,7 @@ def normalize_zh_punct(s: str) -> str:
         s += "。"
     return s
 
-def split_text_v3(s: str, max_chars: int, min_chars: int) -> list[str]:
+def split_text_segments(s: str, max_chars: int, min_chars: int) -> list[str]:
     s = normalize_zh_punct(s)
 
     # 强标点先切
@@ -122,7 +122,7 @@ def main():
     else:
         full = normalize_zh_punct(text)
 
-    segs = [full] if args.no_split else split_text_v3(full, args.max_chars, args.min_chars)
+    segs = [full] if args.no_split else split_text_segments(full, args.max_chars, args.min_chars)
 
     out_fixed = Path(args.out_fixed)
     out_fixed.parent.mkdir(parents=True, exist_ok=True)

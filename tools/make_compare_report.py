@@ -10,8 +10,8 @@ Inputs:
 - cosyvoice vc.log / instruct.log
 
 Outputs (inside run_root):
-- compare_metrics_v2.json
-- compare_report_v2.md
+- compare_metrics.json
+- compare_report.md
 - figs/*.png + figs/*.pdf  (publication-ready, 300dpi + vector PDF)
 
 Design:
@@ -516,7 +516,7 @@ def main() -> None:
         metrics["methods"][m] = block
 
     # Write metrics json
-    out_metrics = args.out_metrics or os.path.join(run_root, "compare_metrics_v2.json")
+    out_metrics = args.out_metrics or os.path.join(run_root, "compare_metrics.json")
     with open(out_metrics, "w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
 
@@ -609,7 +609,7 @@ def main() -> None:
     # ---------------------------
     # Markdown report (CVPR-like narrative)
     # ---------------------------
-    out_report = args.out_report or os.path.join(run_root, "compare_report_v2.md")
+    out_report = args.out_report or os.path.join(run_root, "compare_report.md")
 
     def md_escape(s: str) -> str:
         return s.replace("|", "\\|")
@@ -625,7 +625,7 @@ def main() -> None:
         return f"{mu:.3f} ± {sd:.3f}"
 
     md = []
-    md.append("# EmoVoice / CosyVoice3 Comparison Report (V2, CVPR-grade)")
+    md.append("# EmoVoice / CosyVoice3 Comparison Report ")
     md.append("")
     md.append(f"- **Run root**: `{run_root}`")
     md.append(f"- **JSONL**: `{jsonl_path}`")
